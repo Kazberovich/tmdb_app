@@ -9,7 +9,9 @@ class ApiService {
 
   Future<List<Movie>> getNowPlayingMovie() async {
     try {
-      final response = await _dio.get("$baseUrl/movie_now_paying?$apiKey");
+      print('API call: getNowPlayingMovie');
+      print('URL: $baseUrl/movie/now_playing?api_key=$apiKey');
+      final response = await _dio.get("$baseUrl/movie/now_playing?api_key=$apiKey");
       var movies = response.data['results'] as List;
       List<Movie> movieList = movies.map((e) => Movie.fromJson(e)).toList();
       return movieList;
