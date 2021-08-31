@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -74,11 +76,71 @@ Widget _buildBody(BuildContext context) {
                 print(movies.length);
 
                 return Column(
-                  children: [],
+                  children: [
+                    CarouselSlider.builder(
+                      itemCount: movies.length,
+                      itemBuilder: (BuildContext context, int index, int i) {
+                        Movie movie = movies[index];
+                        return Stack(
+                          alignment: Alignment.bottomLeft,
+                          children: [
+                            ClipRRect(
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    'https://image.tmdb.org/t/p/original/${movie.backdropPath}',
+                                height: MediaQuery.of(context).size.height / 3,
+                                width: MediaQuery.of(context).size.width,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) =>
+                                    Platform.isAndroid
+                                        ? CircularProgressIndicator()
+                                        : CupertinoActivityIndicator(),
+                                errorWidget: (context, url, error) => Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          'assets/images/img_not_found.jpg'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                bottom: 15,
+                                left: 15,
+                              ),
+                              child: Text(
+                                movie.title.toUpperCase(),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  fontFamily: 'muli',
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                      options: CarouselOptions(
+                        autoPlay: true,
+                        enableInfiniteScroll: true,
+                        autoPlayInterval: Duration(seconds: 3),
+                        pauseAutoPlayOnTouch: true,
+                        viewportFraction: 0.8,
+                        enlargeCenterPage: true,
+                      ),
+                    ),
+                  ],
                 );
               } else {
-                print('somethin went wrong');
-                return Container();
+                return Container(
+                  child: Text('somethin went wrong'),
+                );
               }
             })
           ],
