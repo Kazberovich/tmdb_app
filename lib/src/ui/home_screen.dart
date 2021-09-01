@@ -9,6 +9,7 @@ import 'package:tmdb/src/bloc/moviebloc/movie_bloc.dart';
 import 'package:tmdb/src/bloc/moviebloc/movie_bloc_event.dart';
 import 'package:tmdb/src/bloc/moviebloc/movie_bloc_state.dart';
 import 'package:tmdb/src/model/movie.dart';
+import 'package:tmdb/src/ui/category_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -133,6 +134,18 @@ Widget _buildBody(BuildContext context) {
                         pauseAutoPlayOnTouch: true,
                         viewportFraction: 0.8,
                         enlargeCenterPage: true,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 12,
+                          ),
+                          CategoryWidget(),
+                        ],
                       ),
                     ),
                   ],
