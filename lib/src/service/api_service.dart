@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:tmdb/src/model/genre.dart';
 import 'package:tmdb/src/model/movie.dart';
+import 'package:tmdb/src/model/person.dart';
 
 class ApiService {
   final Dio _dio = Dio();
@@ -47,6 +48,22 @@ class ApiService {
       var movies = response.data['results'] as List;
       List<Movie> movieList = movies.map((e) => Movie.fromJson(e)).toList();
       return movieList;
+    } catch (error, stackTrace) {
+      throw Exception("Exception occured: $error with sracktrace: $stackTrace");
+    }
+  }
+
+  Future<List<Person>> getTrendingPerson() async {
+    try {
+      print('API call: getTrendingPerson');
+      print('URL: $baseUrl/movie/now_playing?api_key=$apiKey');
+
+      final response =
+          await _dio.get("$baseUrl/trending/person/week?api_key=$apiKey");
+          print('Response: $response');
+      var persons = response.data['results'] as List;
+      List<Person> personList = persons.map((e) => Person.fromJson(e)).toList();
+      return personList;
     } catch (error, stackTrace) {
       throw Exception("Exception occured: $error with sracktrace: $stackTrace");
     }
