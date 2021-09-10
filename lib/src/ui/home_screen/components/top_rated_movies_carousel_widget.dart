@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tmdb/src/model/movie.dart';
+import 'package:tmdb/src/ui/movie_details_screen/movie_details_screen.dart';
 
 class TopRatedMovieCarouselWidget extends StatelessWidget {
   const TopRatedMovieCarouselWidget({
@@ -21,7 +22,16 @@ class TopRatedMovieCarouselWidget extends StatelessWidget {
       itemBuilder: (BuildContext context, int index, int i) {
         Movie movie = movies[index];
         return GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MovieDetailsScreen(
+                  movie: movie,
+                ),
+              ),
+            );
+          },
           child: Stack(
             alignment: Alignment.bottomLeft,
             children: [

@@ -14,19 +14,20 @@ class Movie {
 
   String? error;
 
-  Movie(
-      {required this.backdropPath,
-      required this.id,
-      required this.originalLanguage,
-      required this.originalTitle,
-      required this.overview,
-      required this.popularity,
-      required this.posterPath,
-      required this.releaseDate,
-      required this.title,
-      required this.video,
-      required this.voteCount,
-      required this.voteAverage});
+  Movie({
+    required this.backdropPath,
+    required this.id,
+    required this.originalLanguage,
+    required this.originalTitle,
+    required this.overview,
+    required this.popularity,
+    required this.posterPath,
+    required this.releaseDate,
+    required this.title,
+    required this.video,
+    required this.voteCount,
+    required this.voteAverage,
+  });
 
   factory Movie.fromJson(dynamic json) {
     if (json == null) {

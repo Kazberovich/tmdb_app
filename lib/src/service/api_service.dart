@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:tmdb/src/model/genre.dart';
 import 'package:tmdb/src/model/movie.dart';
+import 'package:tmdb/src/model/movie_detail.dart';
 import 'package:tmdb/src/model/person.dart';
 
 class ApiService {
@@ -60,10 +61,44 @@ class ApiService {
 
       final response =
           await _dio.get("$baseUrl/trending/person/week?api_key=$apiKey");
-          print('Response: $response');
+      print('Response getTrendingPerson: $response');
       var persons = response.data['results'] as List;
       List<Person> personList = persons.map((e) => Person.fromJson(e)).toList();
       return personList;
+    } catch (error, stackTrace) {
+      throw Exception("Exception occured: $error with sracktrace: $stackTrace");
+    }
+  }
+
+  Future<MovieDetails> getMovieDetails(int movieId) async {
+    try {
+      print('API call: getMovieDetails');
+      print('URL: $baseUrl/movie/now_playing?api_key=$apiKey');
+
+      final response =
+          await _dio.get("$baseUrl/movie/$movieId?api_key=$apiKey");
+      print('Response getMovieDetails: $response');
+      MovieDetails details = MovieDetails.fromJson(response.data);
+
+      details.trailerId = await getYoutubeId(movieId);
+
+      print(details.trailerId);
+      return details;
+    } catch (error, stackTrace) {
+      throw Exception("Exception occured: $error with sracktrace: $stackTrace");
+    }
+  }
+
+  Future<String> getYoutubeId(int movieId) async {
+    try {
+      print('API call: getYoutubeId');
+      print('URL: $baseUrl/movie/$movieId/videos?api_key=$apiKey');
+      final response =
+          await _dio.get("$baseUrl/movie/$movieId/videos?api_key=$apiKey");
+      print('Response getYoutubeId: $response');
+      var youtubeId = response.data['results'][0]['key'];
+      print(youtubeId);
+      return youtubeId;
     } catch (error, stackTrace) {
       throw Exception("Exception occured: $error with sracktrace: $stackTrace");
     }
