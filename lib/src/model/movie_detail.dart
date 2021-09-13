@@ -1,3 +1,7 @@
+import 'package:tmdb/src/model/cast_list.dart';
+
+import 'movie_image.dart';
+
 class MovieDetails {
   final String? id;
   final String? title;
@@ -12,6 +16,10 @@ class MovieDetails {
   final String? voteCount;
 
   String? trailerId;
+
+  MovieImage? movieImage;
+
+  List<Cast>? castList;
 
   MovieDetails({
     this.id,

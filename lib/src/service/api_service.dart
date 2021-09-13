@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:tmdb/src/model/cast_list.dart';
 import 'package:tmdb/src/model/genre.dart';
 import 'package:tmdb/src/model/movie.dart';
 import 'package:tmdb/src/model/movie_detail.dart';
+import 'package:tmdb/src/model/movie_image.dart';
 import 'package:tmdb/src/model/person.dart';
 
 class ApiService {
@@ -81,6 +83,8 @@ class ApiService {
       MovieDetails details = MovieDetails.fromJson(response.data);
 
       details.trailerId = await getYoutubeId(movieId);
+      details.movieImage = await getMovieImage(movieId);
+      details.castList = await getCastList(movieId);
 
       print(details.trailerId);
       return details;
@@ -99,6 +103,39 @@ class ApiService {
       var youtubeId = response.data['results'][0]['key'];
       print(youtubeId);
       return youtubeId;
+    } catch (error, stackTrace) {
+      throw Exception("Exception occured: $error with sracktrace: $stackTrace");
+    }
+  }
+
+  Future<MovieImage> getMovieImage(int movieId) async {
+    try {
+      print('API call: getMovieImage');
+      print('URL: $baseUrl/movie/$movieId/images?api_key=$apiKey');
+
+      final response =
+          await _dio.get('$baseUrl/movie/$movieId/images?api_key=$apiKey');
+      print('Response getMovieImage: $response');
+
+      return MovieImage.fromJson(response.data);
+    } catch (error, stackTrace) {
+      throw Exception("Exception occured: $error with sracktrace: $stackTrace");
+    }
+  }
+
+  Future<List<Cast>> getCastList(int movieId) async {
+    try {
+      print('API call: getCastList');
+      print('URL: $baseUrl/movie/$movieId/credits?api_key=$apiKey');
+
+      final response =
+          await _dio.get('$baseUrl/movie/$movieId/credits?api_key=$apiKey');
+      print('Response getCastList: $response');
+
+      var list = response.data['cast'] as List;
+      List<Cast> castList = list.map((e) => Cast.fromJson(e)).toList();
+
+      return castList;
     } catch (error, stackTrace) {
       throw Exception("Exception occured: $error with sracktrace: $stackTrace");
     }
