@@ -13,6 +13,8 @@ import 'package:tmdb/src/model/movie_detail.dart';
 import 'package:tmdb/src/model/screenshot.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'components/movie_casts_widget.dart';
+
 class MovieDetailsScreen extends StatelessWidget {
   final Movie? movie;
 
@@ -298,101 +300,7 @@ class MovieDetailsScreen extends StatelessWidget {
                                 fontFamily: 'muli',
                               ),
                         ),
-                        Container(
-                          height: 110,
-                          child: ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                Cast cast = movieDetails.castList![index];
-                                return Container(
-                                  child: Column(
-                                    children: [
-                                      Card(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                        ),
-                                        elevation: 4,
-                                        child: ClipRRect(
-                                          child: CachedNetworkImage(
-                                            imageUrl:
-                                                'https://image.tmdb.org/t/p/w200${cast.profilePath!}',
-                                            imageBuilder:
-                                                (context, imageBuilder) {
-                                              return Container(
-                                                width: 80,
-                                                height: 80,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                    Radius.circular(100),
-                                                  ),
-                                                  image: DecorationImage(
-                                                    image: imageBuilder,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            placeholder: (context, url) =>
-                                                Container(
-                                              height: 80,
-                                              width: 80,
-                                              child: Center(
-                                                child: Platform.isAndroid
-                                                    ? CircularProgressIndicator()
-                                                    : CupertinoActivityIndicator(),
-                                              ),
-                                            ),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    Container(
-                                              width: 80,
-                                              height: 80,
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: AssetImage(
-                                                    'assets/images/img_not_found.jpg',
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        child: Text(
-                                          cast.name!,
-                                          style: TextStyle(
-                                            fontFamily: 'muli',
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black45,
-                                            fontSize: 8,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        child: Text(
-                                          cast.character!,
-                                          style: TextStyle(
-                                            fontFamily: 'muli',
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black45,
-                                            fontSize: 8,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                              separatorBuilder: (context, index) =>
-                                  VerticalDivider(
-                                    width: 5,
-                                    color: Colors.transparent,
-                                  ),
-                              itemCount: movieDetails.castList!.length),
-                        ),
+                        MovieCastsWidget(movieDetails: movieDetails),
                       ],
                     ),
                   ),
