@@ -12,6 +12,7 @@ import 'package:tmdb/src/bloc/moviebloc/movie_bloc_event.dart';
 import 'package:tmdb/src/bloc/moviebloc/movie_bloc_state.dart';
 import 'package:tmdb/src/model/genre.dart';
 import 'package:tmdb/src/model/movie.dart';
+import 'package:tmdb/src/ui/movie_details_screen/movie_details_screen.dart';
 
 class CategoryWidget extends StatefulWidget {
   final int selectedGenre;
@@ -152,40 +153,50 @@ class _CategoryWidgetState extends State<CategoryWidget> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ClipRRect(
-                        child: CachedNetworkImage(
-                          imageBuilder: (ctx, imageProvider) {
-                            return Container(
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MovieDetailsScreen(
+                                        movie: movie,
+                                      )));
+                        },
+                        child: ClipRRect(
+                          child: CachedNetworkImage(
+                            imageBuilder: (ctx, imageProvider) {
+                              return Container(
+                                width: 190,
+                                height: 250,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(12),
+                                    ),
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                    )),
+                              );
+                            },
+                            placeholder: (contex, url) => Container(
+                              width: 190,
+                              height: 250,
+                              child: Center(
+                                child: Platform.isAndroid
+                                    ? CircularProgressIndicator()
+                                    : CupertinoActivityIndicator(),
+                              ),
+                            ),
+                            imageUrl:
+                                'https://image.tmdb.org/t/p/original/${movie.backdropPath}',
+                            errorWidget: (contxt, url, error) => Container(
                               width: 190,
                               height: 250,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(12),
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                    'assets/images/img_not_found.jpg',
                                   ),
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                  )),
-                            );
-                          },
-                          placeholder: (contex, url) => Container(
-                            width: 190,
-                            height: 250,
-                            child: Center(
-                              child: Platform.isAndroid
-                                  ? CircularProgressIndicator()
-                                  : CupertinoActivityIndicator(),
-                            ),
-                          ),
-                          imageUrl:
-                              'https://image.tmdb.org/t/p/original/${movie.backdropPath}',
-                          errorWidget: (contxt, url, error) => Container(
-                            width: 190,
-                            height: 250,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  'assets/images/img_not_found.jpg',
                                 ),
                               ),
                             ),

@@ -7,18 +7,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tmdb/src/bloc/moviedetailsbloc/movie_details_bloc.dart';
 import 'package:tmdb/src/bloc/moviedetailsbloc/movie_details_bloc_event.dart';
 import 'package:tmdb/src/bloc/moviedetailsbloc/movie_details_bloc_state.dart';
-import 'package:tmdb/src/model/cast_list.dart';
 import 'package:tmdb/src/model/movie.dart';
 import 'package:tmdb/src/model/movie_detail.dart';
-import 'package:tmdb/src/model/screenshot.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'components/movie_casts_widget.dart';
+import 'components/release_runtime_budget_widget.dart';
+import 'components/screenshots_widget.dart';
 
 class MovieDetailsScreen extends StatelessWidget {
   final Movie? movie;
 
-  const MovieDetailsScreen({Key? key, this.movie}) : super(key: key);
+  const MovieDetailsScreen({this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -157,92 +157,7 @@ class MovieDetailsScreen extends StatelessWidget {
                         SizedBox(
                           height: 10,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Release date'.toUpperCase(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .caption!
-                                      .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'muli',
-                                      ),
-                                ),
-                                Text(
-                                  movieDetails.releaseDate!,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle2!
-                                      .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'muli',
-                                        fontSize: 12,
-                                        color: Colors.yellow[800],
-                                      ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'run time'.toUpperCase(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .caption!
-                                      .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'muli',
-                                      ),
-                                ),
-                                Text(
-                                  movieDetails.runtime! + " min",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle2!
-                                      .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'muli',
-                                        fontSize: 12,
-                                        color: Colors.yellow[800],
-                                      ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'budget'.toUpperCase(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .caption!
-                                      .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'muli',
-                                      ),
-                                ),
-                                Text(
-                                  movieDetails.budget! + "\$",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle2!
-                                      .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'muli',
-                                        fontSize: 12,
-                                        color: Colors.yellow[800],
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                        ReleaseRuntimeBudgetWidget(movieDetails: movieDetails),
                         SizedBox(
                           height: 10,
                         ),
@@ -253,43 +168,7 @@ class MovieDetailsScreen extends StatelessWidget {
                                 fontFamily: 'muli',
                               ),
                         ),
-                        Container(
-                          height: 155,
-                          child: ListView.separated(
-                              itemBuilder: (context, index) {
-                                Screenshot screenshot =
-                                    movieDetails.movieImage!.backdrops![index];
-                                return Container(
-                                  child: Card(
-                                    elevation: 3,
-                                    borderOnForeground: true,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: CachedNetworkImage(
-                                        placeholder: (context, url) =>
-                                            Platform.isAndroid
-                                                ? CircularProgressIndicator()
-                                                : CupertinoActivityIndicator(),
-                                        imageUrl:
-                                            'https://image.tmdb.org/t/p/w500${screenshot.imagePath}',
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                              scrollDirection: Axis.horizontal,
-                              separatorBuilder: (context, index) =>
-                                  VerticalDivider(
-                                    color: Colors.transparent,
-                                    width: 5,
-                                  ),
-                              itemCount:
-                                  movieDetails.movieImage!.backdrops!.length),
-                        ),
+                        ScreenshotsWidget(movieDetails: movieDetails),
                         SizedBox(
                           height: 10,
                         ),
